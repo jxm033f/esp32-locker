@@ -1,2 +1,2 @@
-# esp32-locker
-Module 2: Locker
+# Module 2: Locker
+COMS BC 3930
