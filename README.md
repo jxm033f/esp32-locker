@@ -59,3 +59,26 @@ Pin 4
     1. If password was correct, the servo locks the box.
     2. All inputs save their values based on user input.
     3. Waiting on blue button to be pressed to check password.
+
+## Executing Program
+### On Raspberry Pi
+1. Go to [Arduino Site](https://www.arduino.cc/en/software)
+2. Download Linux ARM, extract file and install the Arduino IDE
+3. Clone esp32-locker
+```bash
+git clone https://github.com/jxm033f/esp32-locker.git
+```
+4. Open Arduino IDE -> File -> Open -> password_protected.ino <br />
+        1. File is located esp32-locker/password_protected
+5. Upload Code which will allow it to run through the ESP32
+
+### On Normal Computer
+1. Go to [Arduino Site](https://www.arduino.cc/en/software)
+2. Download appropiate software and install the Arduino IDE
+3. Clone esp32-locker
+```bash
+git clone https://github.com/jxm033f/esp32-locker.git
+```
+4. Open Arduino IDE -> File -> Open -> password_protected.ino <br />
+        1. File is located esp32-locker/password_protected
+5. Upload Code which will allow it to run through the ESP32
