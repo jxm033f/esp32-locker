@@ -6,15 +6,12 @@
 #define button_er    15
 #define servoPin     18
 #define switch_onoff 5
+#define pwmPin       4
 
 //Set up RGB Wheel
 #define leds_pin     2
 #define leds_count   8
 #define channel      0
-
-//#define red_pin 4
-//#define green_pin 2
-//#define blue_pin 0
 
 Freenove_ESP32_WS2812 strip = Freenove_ESP32_WS2812(leds_count, leds_pin, channel, TYPE_GRB);
 Servo myservo;
@@ -32,7 +29,7 @@ int count_password = -1;
 int switch_password;
 
 int xyzPins[] = {12, 13, 9};
-int xyCornerDirection[4][3] = { {4095, 0, 1}, {0, 0, 7}, {0, 4095, 5}, {4095, 4095, 3} };
+int xyCornerDirection[4][3] = { {4095, 0, 7}, {0, 0, 5}, {0, 4095, 3}, {4095, 4095, 1} };
 int xyCorners = 4;
 int isCorner = false;
 
@@ -40,11 +37,11 @@ int led_position[8][2] = { {0, 3}, {1, 4}, {2, 5}, {3, 6}, {4, 7}, {5, 8}, {6, 1
 int m_color[2][3] = { {0, 0, 255}, {0, 0, 0} };
 int led_password = -1;
 
-//void clear_led() {
-//  digitalWrite(red_pin, HIGH);
-//  digitalWrite(green_pin, HIGH);
-//  digitalWrite(blue_pin, HIGH);
-//}
+int pwmValue = 0;
+long previousMillis = 0;
+long pwmInterval = 1000;
+int pwmPrevValue;
+bool firstTime = true;
 
 void clear_leds() {
   for (int i = 0; i < leds_count; i++) {
@@ -74,11 +71,7 @@ void setup() {
   pinMode(switch_onoff, INPUT);
   pinMode(xyzPins[2], INPUT_PULLUP);
 
-//  pinMode(red_pin, OUTPUT);
-//  pinMode(green_pin, OUTPUT);
-//  pinMode(blue_pin, OUTPUT);
-
-//  clear_led();
+  pinMode(pwmPin, OUTPUT);
 
   strip.begin();
   strip.setBrightness(10);
@@ -97,10 +90,20 @@ void loop() {
   int y_Value = analogRead(xyzPins[1]);
   int z_Value = digitalRead(xyzPins[2]);
 
+  unsigned long currentMillis = millis();
+
   if (!hasStarted) {
+    switch_password = digitalRead(switch_onoff);
+    if (switch_password == LOW) {
+      pwmPrevValue = 0;
+    } else if(switch_password == HIGH) {
+      pwmPrevValue = 1;
+    }
+    
     if (er_Value == HIGH && er_isPressed) {
       er_isPressed = !er_isPressed;
       hasStarted = !hasStarted;
+      Serial.println("has started");
       delay(100);
     } else if (er_Value == LOW && !er_isPressed) {
       er_isPressed = !er_isPressed;
@@ -108,6 +111,31 @@ void loop() {
   } else if (hasStarted) {
     if (!hasEntered) {
       switch_password = digitalRead(switch_onoff);
+      if (switch_password == LOW && pwmPrevValue == 1) {
+        if (firstTime) {
+          previousMillis = currentMillis;
+          firstTime = false;
+        }
+        analogWrite(pwmPin, 50);
+        if (currentMillis - previousMillis > pwmInterval) {
+          firstTime = true;
+          pwmPrevValue = 0;
+          analogWrite(pwmPin, 0);
+          previousMillis = currentMillis;
+        }
+      } else if(switch_password == HIGH && pwmPrevValue == 0) {
+        if (firstTime) {
+          previousMillis = currentMillis;
+          firstTime = false;
+        }
+        analogWrite(pwmPin, 150);
+        if (currentMillis - previousMillis > pwmInterval) {
+          firstTime = true;
+          pwmPrevValue = 1;
+          analogWrite(pwmPin, 0);
+          previousMillis = currentMillis;
+        }
+      }
       
       if (count_Value == HIGH  && count_isPressed) {
         count_isPressed = !count_isPressed;
@@ -129,13 +157,13 @@ void loop() {
       }
       if (!isCorner) {
         if (x_Value == 4095) {
-          fill_led(2);
-        } else if (x_Value == 0) {
-          fill_led(6);
-        } else if (y_Value == 4095) {
-          fill_led(4);
-        } else if (y_Value == 0) {
           fill_led(0);
+        } else if (x_Value == 0) {
+          fill_led(4);
+        } else if (y_Value == 4095) {
+          fill_led(2);
+        } else if (y_Value == 0) {
+          fill_led(6);
         }
       }
       isCorner = false;
