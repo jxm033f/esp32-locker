@@ -43,6 +43,12 @@ long pwmInterval = 1000;
 int pwmPrevValue;
 bool firstTime = true;
 
+String messagePassword = "";
+bool passwordSet = false;
+int led_password_correct = -1;
+int count_password_correct = -1;
+int switch_password_correct = -1;
+
 void clear_leds() {
   for (int i = 0; i < leds_count; i++) {
     strip.setLedColorData(i, m_color[1][0], m_color[1][1], m_color[1][2]);
@@ -57,7 +63,7 @@ void fill_led(int led) {
 }
 
 bool check_password() {
-  if (led_password == 6 && count_password == 0 && switch_password == 1) {
+  if (led_password == led_password_correct && count_password == count_password_correct && switch_password == switch_password_correct) {
     return true;
   }
   return false;
@@ -93,20 +99,37 @@ void loop() {
   unsigned long currentMillis = millis();
 
   if (!hasStarted) {
-    switch_password = digitalRead(switch_onoff);
-    if (switch_password == LOW) {
-      pwmPrevValue = 0;
-    } else if(switch_password == HIGH) {
-      pwmPrevValue = 1;
-    }
+    if (!passwordSet) {
+      Serial.println("Waiting for password");
     
-    if (er_Value == HIGH && er_isPressed) {
-      er_isPressed = !er_isPressed;
-      hasStarted = !hasStarted;
-      Serial.println("has started");
-      delay(100);
-    } else if (er_Value == LOW && !er_isPressed) {
-      er_isPressed = !er_isPressed;
+      while (Serial.available() > 0) {
+        char c = Serial.read();
+        messagePassword += c;
+      }
+  
+      if (messagePassword != "") {
+        count_password_correct = String(messagePassword.charAt(9)).toInt();
+        switch_password_correct = String(messagePassword.charAt(11)).toInt();
+        led_password_correct = String(messagePassword.charAt(13)).toInt();
+        passwordSet = true;
+      }
+    } else if (passwordSet) {
+      Serial.println(messagePassword);
+      switch_password = digitalRead(switch_onoff);
+      if (switch_password == LOW) {
+        pwmPrevValue = 0;
+      } else if(switch_password == HIGH) {
+        pwmPrevValue = 1;
+      }
+    
+      if (er_Value == HIGH && er_isPressed) {
+        er_isPressed = !er_isPressed;
+        hasStarted = !hasStarted;
+        Serial.println("Can now enter combination");
+        delay(100);
+      } else if (er_Value == LOW && !er_isPressed) {
+        er_isPressed = !er_isPressed;
+      }
     }
   } else if (hasStarted) {
     if (!hasEntered) {
@@ -181,7 +204,12 @@ void loop() {
       er_isPressed = !er_isPressed;
       hasEntered = !hasEntered;
       hasRestart = !hasRestart;
+
+      //restart values
       count_password = -1;
+      led_password = -1;
+      clear_leds();
+      strip.show();
 
       if (waitToClose) {
         myservo.write(0);
