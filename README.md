@@ -1,4 +1,4 @@
-# Module 2: Locker
+# Module 2: Secret Locker
 COMS BC 3930
 
 Through this module, I created an interactive locker that allows you to unlock a secret box if given the correct password. The locker has 5 modes, which allow for different functions to occur depending on the state. Both the Raspberry Pi and ESP32 are used for this module. Unlike Module 1, the Raspberry Pi is only used for its power source as the whole program is being runned through the ESP32.
@@ -77,6 +77,12 @@ git clone https://github.com/jxm033f/esp32-locker.git
 2. Download appropiate software and install the Arduino IDE
 
 Follow Steps 3-5 from executing on a Raspberry Pi
+
+## Images
+![Front View](https://user-images.githubusercontent.com/11239829/109461118-b2fe6480-7a2f-11eb-962d-6110937e424b.jpg)
+![Top View](https://user-images.githubusercontent.com/11239829/109461141-bb569f80-7a2f-11eb-9156-28cfd674450a.jpg)
+![Side View](https://user-images.githubusercontent.com/11239829/109461128-b7c31880-7a2f-11eb-9d9b-35b5b2e10c72.jpg)
+![Inside View](https://user-images.githubusercontent.com/11239829/109461123-b560be80-7a2f-11eb-8e0b-67ce48e2a3a6.jpg)
 
 ## Links
 [Blog Post](http://edblogs.columbia.edu/comsx3930-001-2021-1/2021/03/01/module-2-secret-locker/) <br />
