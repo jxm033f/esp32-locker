@@ -63,8 +63,15 @@ Pin 4
 ## Executing Program
 ### On Raspberry Pi
 1. Go to [Arduino Site](https://www.arduino.cc/en/software)
-2. Download Linux ARM, extract file and install the Arduino IDE
-3. Clone esp32-locker
+2. Download Linux ARM 32-bit
+3. Extract file and install the Arduino IDE in dowloaded directory (eg. Downloads)
+```bash
+cd Downloads
+tar -xvf arduino-1.8.13-linuxarm.tar.xz
+cd arduino-1.8.13
+sudo ./install.sh
+```
+4. Clone esp32-locker
 ```bash
 git clone https://github.com/jxm033f/esp32-locker.git
 ```
