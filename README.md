@@ -75,4 +75,5 @@ git clone https://github.com/jxm033f/esp32-locker.git
 ### On Normal Computer
 1. Go to [Arduino Site](https://www.arduino.cc/en/software)
 2. Download appropiate software and install the Arduino IDE
-Follow Steps 3-5 from executing on a Raspberry Pi.
+
+Follow Steps 3-5 from executing on a Raspberry Pi
