@@ -44,7 +44,8 @@ Pin 4
 ## Modes
 1. Locker Combination has not begun
     1. All inputs (besides the blue button) are at rest and states aren't saved.
-    2. Waiting on blue button to start.
+    2. Python script is run which allows user to set a passcode.
+    3. Waiting on blue button to start.
 2. Locker Combination has begun
     1. All inputs save their values based on user input.
     2. Waiting on blue button to be pressed to check password.
@@ -75,15 +76,19 @@ sudo ./install.sh
 ```bash
 git clone https://github.com/jxm033f/esp32-locker.git
 ```
-4. Open Arduino IDE -> File -> Open -> password_protected.ino <br />
+5. Open Arduino IDE -> File -> Open -> password_protected.ino <br />
         1. File is located esp32-locker/password_protected
-5. Upload Code which will allow it to run through the ESP32
+6. Upload Code which will allow it to run through the ESP32
+7. Then run setting_locker.py on Terminal
+```bash
+python3 setting_locker.py
+```
 
 ### On Normal Computer
 1. Go to [Arduino Site](https://www.arduino.cc/en/software)
 2. Download appropiate software and install the Arduino IDE
 
-Follow Steps 3-5 from executing on a Raspberry Pi
+Follow Steps 4-7 from executing on a Raspberry Pi
 
 ## Images
 ![Front View](https://user-images.githubusercontent.com/11239829/109461118-b2fe6480-7a2f-11eb-962d-6110937e424b.jpg)
