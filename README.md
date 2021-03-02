@@ -89,6 +89,7 @@ python3 setting_locker.py
 2. Download appropiate software and install the Arduino IDE
 
 Follow Steps 4-7 from executing on a Raspberry Pi
+* You will need to change line 30 on setting_locker.py to your correct port
 
 ## Images
 ![Front View](https://user-images.githubusercontent.com/11239829/109461118-b2fe6480-7a2f-11eb-962d-6110937e424b.jpg)
